@@ -1,10 +1,20 @@
-import { products } from '@/data'
 import clsx from 'clsx'
-import { ProductCard } from './ProductCard'
+import {useAppDispatch, useAppSelector} from "@/redux/store.ts";
+import {getAllProducts} from "@/redux/slices/productsSlice.ts";
+import {useEffect} from "react";
+import {ProductCard} from "@/components/ProductList/ProductCard.tsx";
+
+
 
 type Props = { className?: string }
 
 export function ProductList({ className }: Props) {
+    const dispatch = useAppDispatch()
+    const {productList} = useAppSelector(state => state.productState)
+    useEffect(() => {
+        dispatch(getAllProducts())
+    }, [dispatch]);
+
   return (
     <ul
       className={clsx(
@@ -12,7 +22,7 @@ export function ProductList({ className }: Props) {
         className
       )}
     >
-      {products.map((product) => (
+      {productList.map((product) => (
         <li key={product.id} className="grid">
           <ProductCard product={product} />
         </li>

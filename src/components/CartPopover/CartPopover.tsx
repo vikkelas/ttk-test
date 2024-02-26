@@ -1,12 +1,12 @@
-import { products } from '@/data'
 import { FaceFrownIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { PopoverProduct } from './PopoverProduct'
+import {Product} from "@/types";
 
-type Props = { className?: string }
+type Props = { className?: string, basket: Product[] | [] }
 
-export function CartPopover({ className }: Props) {
-  const product = products[0]
+export function CartPopover({ className, basket }: Props) {
+
 
   return (
     <div
@@ -15,18 +15,23 @@ export function CartPopover({ className }: Props) {
         className
       )}
     >
-      {/* Корзина пуста */}
-      <div className="grid justify-items-center">
-        <FaceFrownIcon className="h-9 w-9 text-neutral-600" />
-        <span>The cart is empty</span>
-      </div>
-
-      {/* В корзине есть товары */}
-      <ul className="grid gap-3">
-        <li className="grid pb-3 border-b border-neutral-200 last:pb-0 last:border-b-0">
-          <PopoverProduct product={product} className="max-w-80" />
-        </li>
-      </ul>
+      {!basket.length?
+          // Корзина пуста
+        <div className="grid justify-items-center">
+          <FaceFrownIcon className="h-9 w-9 text-neutral-600" />
+          <span>The cart is empty</span>
+        </div>:
+          // В корзине есть товары
+        <ul className="grid gap-3">
+          {basket.map((item, index)=>{
+            return (
+              <li key={index} className="grid pb-3 border-b border-neutral-200 last:pb-0 last:border-b-0">
+                <PopoverProduct product={item} className="max-w-80" />
+              </li>
+            )
+          })}
+        </ul>
+      }
     </div>
   )
 }
